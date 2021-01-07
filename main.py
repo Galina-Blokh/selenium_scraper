@@ -75,7 +75,7 @@ def extract_links_to_file(file_name):
     recipe_links = get_links_from_site(recipe_driver)
 
     # write down links to the txt file
-    output_recipe_links = open(file_name, 'w')
+    output_recipe_links = open(file_name, 'a+')
     for link in recipe_links:
         output_recipe_links.write(link + '\n')
     output_recipe_links.close()
