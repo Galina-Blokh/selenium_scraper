@@ -3,10 +3,12 @@ import time
 from selenium.common.exceptions import NoSuchElementException
 
 URL = f"https://www.simplyrecipes.com/latest/"
-FILE_NAME = 'recipe_links_simplyrecipes'
+FILE_NAME = 'recipe_links_simplyrecipes.txt'
+EMPTY_LINKS = 'recipe_empty.txt'
+PATTERN = 'simplyrecipes.com/recipes/'
 
 
-def connect():
+def connect(url=URL):
     """
     create chrome driver
     :return: chrome driver:obj
@@ -14,7 +16,7 @@ def connect():
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     driver = webdriver.Chrome(chrome_options=options, executable_path='./chromedriver')
-    driver.get(URL)
+    driver.get(url)
     time.sleep(5)
     return driver
 
@@ -75,15 +77,30 @@ def extract_links_to_file(file_name):
     recipe_links = get_links_from_site(recipe_driver)
 
     # write down links to the txt file
-    output_recipe_links = open(file_name, 'a+')
-    for link in recipe_links:
-        output_recipe_links.write(link + '\n')
+    output_recipe_links = open(file_name, 'w')
+    empty_links = open(EMPTY_LINKS, 'w')
+    for link_list in recipe_links:
+        for url in link_list:
+            if url.__contains__(PATTERN):
+                output_recipe_links.write(url + '\n')
+            else:
+                empty_links.write(url + '\n')
     output_recipe_links.close()
+    empty_links.close()
 
     print(f'links are in {file_name} file')
 
 
+def get_recipe(link, counter_to_print=1):
+    pass
+
+
 if __name__ == '__main__':
+    json_file = {}
     links_file = FILE_NAME
     extract_links_to_file(links_file)
     print('links are collected, the program is finished')
+    recipe_links = open(links_file, "r").readlines()
+    for counter_to_print, link in enumerate(recipe_links):
+        one_recipe = get_recipe(link, counter_to_print)
+        json_file.append(one_recipe)
