@@ -16,8 +16,14 @@ def connect(url=URL):
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     driver = webdriver.Chrome(chrome_options=options, executable_path='./chromedriver')
-    driver.get(url)
-    time.sleep(5)
+    try:
+        driver.get(url)
+        time.sleep(5)
+    except:
+        print('new connection try')
+        driver.get(url)
+        time.sleep(5)
+
     return driver
 
 
@@ -91,8 +97,8 @@ def extract_links_to_file(file_name):
     print(f'links are in {file_name} file')
 
 
-def get_recipe(link, counter_to_print=1):
-    pass
+# def get_recipe(link, counter_to_print=1):
+#     pass
 
 
 if __name__ == '__main__':
@@ -101,6 +107,6 @@ if __name__ == '__main__':
     extract_links_to_file(links_file)
     print('links are collected, the program is finished')
     recipe_links = open(links_file, "r").readlines()
-    for counter_to_print, link in enumerate(recipe_links):
-        one_recipe = get_recipe(link, counter_to_print)
-        json_file.append(one_recipe)
+    # for counter_to_print, link in enumerate(recipe_links):
+    #     one_recipe = get_recipe(link, counter_to_print)
+    #     json_file.append(one_recipe)
